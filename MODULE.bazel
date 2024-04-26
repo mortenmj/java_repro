@@ -1,0 +1,24 @@
+module(
+    name = "java_repro",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "rules_jvm_external", version = "6.1")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "co.elastic.clients:elasticsearch-java:7.17.2",
+    ],
+    fail_if_repin_required = True,
+    lock_file = "//:maven_install.json",
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+use_repo(
+    maven,
+    "maven",
+    "unpinned_maven",
+)
